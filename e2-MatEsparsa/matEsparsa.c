@@ -25,7 +25,7 @@ typedef struct esparsa Esparsa;
 
 Esparsa cria_mat(){
     Esparsa m;
-    printf("Tamanho da Matriz Esparsa (linhas x colunas): ");
+    printf("\nTamanho da Matriz Esparsa (linhas x colunas): ");
     scanf("%d %d", &m.linhas, &m.colunas);
     m.prim = NULL;
     return m;
@@ -41,7 +41,7 @@ Lista* novo_noh(Lista* listaMat, int l, int c, int v){
 }
 
 void preenche_mat(Esparsa* m){
-    printf("Preenchimento da matriz esparsa: digite a linha, coluna e o valor nao nulo\n");
+    printf("\nPreenchimento da matriz esparsa: digite a linha, coluna e o valor nao nulo\n");
     printf("(Para parar de preencher a matriz, digite 0 0 0)\n");
     int r = 1;
     while(r==1){
@@ -79,19 +79,57 @@ void imprime_mat(Esparsa m){
 }
 
 
-void consulta_elem(){//informar linha e coluna
-    printf("Linha e Coluna do elemento a consultar: ");
-    scanf("%d %d")
+void consulta_elem(Esparsa m){//informar linha e coluna
+    int lin, col;
+    Lista* aux;
+    int r = 1;    
+    while(r==1){
+        printf("\nLinha e Coluna do elemento a consultar: ");
+        scanf("%d %d", &lin, &col);
+    
+        int nulo = 1;
+        for(aux = m.prim; aux != NULL; aux = aux->prox){
+            if((lin == aux->linha) && (col == aux->coluna)){
+                printf("Elemento da posicao (%d, %d): %d", lin, col, aux->info);
+                nulo = 0;
+                break;
+            }
+        }
+        if(nulo == 1)
+            printf("Elemento da posicao (%d, %d): 0", lin, col);
+        printf("\nOutra pesquisa? 1-SIM   0-NAO\t");
+        scanf("%d", &r);
+    }
 }
 
-void imprime_somatorio_linha(int l);
-void percentulal_nao_nulos();
-*/
+void imprime_somatorio_linha(Esparsa m){
+    int lin, somatorio = 0;
+    Lista* aux;
+    printf("\nLinha a se realizar o somatorio: ");
+    scanf("%d", &lin);
+    for(aux = m.prim; aux != NULL; aux = aux->prox){
+        if(aux->linha == lin)
+            somatorio += aux->info;
+    }
+    printf("Somatorio dos elementos da linha %d: %d\n", lin, somatorio);
+}
+void percentulal_nao_nulos(Esparsa m){
+    Lista* aux;
+    float naoNulos = 0;
+    for(aux = m.prim; aux != NULL; aux = aux->prox){
+        naoNulos += 1;
+    }
+printf("\nPercentual de elementos nao nulos da matriz: %.2f %%", naoNulos * ((m.linhas * m.colunas) / 100));
+}
+
 
 int main(int argc, char const *argv[])
 {
     Esparsa matriz = cria_mat();
     preenche_mat(&matriz);
     imprime_mat(matriz);//nao e obrigatorio essa aqui
+    consulta_elem(matriz);
+    imprime_somatorio_linha(matriz);
+    percentulal_nao_nulos(matriz);
     return 0;
 }
