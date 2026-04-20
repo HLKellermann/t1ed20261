@@ -1,27 +1,6 @@
-/*
-- consulta de um determinado elemento da matriz (para consultar um elemento, informe a linha e a coluna onde ele se encontra);
-- impressão de somatório de uma linha i (informada pelo usuário);
-- percentual de elementos não nulos na matriz lida.*/
-
 #include <stdio.h>
 #include <stdlib.h>
-
-struct lista //lista de valores não nulos da matriz esparsa. Os elementos não nulos da matriz são armazenados nesta lista.
-{
-    int linha; // linha onde se encontra o elemento não nulo
-    int coluna; // coluna onde se encontra o elemento não nulo
-    int info; // valor do elemento não nulo
-    struct lista* prox; // apontador para o proximo elemento não nulo da matriz
-};
-typedef struct lista Lista;
-
-struct esparsa
-{
-    int linhas; //numero de linhas da matriz
-    int colunas; //numero de colunas da matriz
-    struct lista* prim; //apontador para o primeiro noh não nulo da matriz
-};
-typedef struct esparsa Esparsa;
+#include "matEsparsa.h"
 
 Esparsa cria_mat(){
     Esparsa m;
@@ -49,12 +28,14 @@ void preenche_mat(Esparsa* m){
         scanf("%d %d %d", &l, &c, &v);
         if((l==0 && c==0) && v==0)
             r = 0;
-        else
+        else if((l>=0 && l<m->linhas) && (c>=0 && c<m->colunas))
             m->prim = novo_noh(m->prim, l, c, v);
+        else
+            printf("Posicao para a matriz invalida!Tente de novo ou pare (0 0 0): \n");
     }
 }
 
-//nao e obrigatorio essa aqui
+//funcao adicional para visualizar a matriz, nao foi solicitada no exercicio
 void imprime_mat(Esparsa m){
     Lista* aux;
     int l, c;
@@ -78,58 +59,80 @@ void imprime_mat(Esparsa m){
     printf("\n");
 }
 
+//funcao auxiliar: repete while ate a input ser valido (1 ou 0), retorna opcao para funcao principal
+int resposta(){
+    int r;
+    do{
+        printf("\n[1] Repetir operacao   [0] Parar\t");
+        scanf("%d", &r);
+        if(r != 1 && r != 0)
+            printf("invalido!");
+    }while(r!=1 && r!=0);
+    return r;
+}
 
-void consulta_elem(Esparsa m){//informar linha e coluna
+void consulta_elem(Esparsa m){
     int lin, col;
     Lista* aux;
     int r = 1;    
     while(r==1){
         printf("\nLinha e Coluna do elemento a consultar: ");
         scanf("%d %d", &lin, &col);
-    
-        int nulo = 1;
-        for(aux = m.prim; aux != NULL; aux = aux->prox){
-            if((lin == aux->linha) && (col == aux->coluna)){
-                printf("Elemento da posicao (%d, %d): %d", lin, col, aux->info);
-                nulo = 0;
-                break;
+        
+        if((lin>=0 && lin<m.linhas) && (col>=0 && col<m.colunas)){
+            int nulo = 1;
+            for(aux = m.prim; aux != NULL; aux = aux->prox){
+                if((lin == aux->linha) && (col == aux->coluna)){
+                    printf("Elemento da posicao (%d, %d): %d", lin, col, aux->info);
+                    nulo = 0;
+                    break;
+                }
             }
+            if(nulo == 1)
+                printf("Elemento da posicao (%d, %d): 0", lin, col);
+        }else{
+            printf("Posicao a consultar invalida!");
         }
-        if(nulo == 1)
-            printf("Elemento da posicao (%d, %d): 0", lin, col);
-        printf("\nOutra pesquisa? 1-SIM   0-NAO\t");
-        scanf("%d", &r);
+        r = resposta(); 
     }
 }
 
 void imprime_somatorio_linha(Esparsa m){
-    int lin, somatorio = 0;
+    int lin, r = 1;
     Lista* aux;
-    printf("\nLinha a se realizar o somatorio: ");
-    scanf("%d", &lin);
-    for(aux = m.prim; aux != NULL; aux = aux->prox){
-        if(aux->linha == lin)
-            somatorio += aux->info;
+    while(r==1){
+        int somatorio = 0;
+        printf("\nLinha a se realizar o somatorio: ");
+        scanf("%d", &lin);
+        if(lin>= 0 && lin<m.linhas){
+            for(aux = m.prim; aux != NULL; aux = aux->prox){
+                if(aux->linha == lin)
+                    somatorio += aux->info;
+            }
+            printf("Somatorio dos elementos da linha %d: %d\n", lin, somatorio);
+        }else{
+            printf("Linha invalida!");
+        }
+        r = resposta();
     }
-    printf("Somatorio dos elementos da linha %d: %d\n", lin, somatorio);
 }
-void percentulal_nao_nulos(Esparsa m){
+
+void percent_nao_nulos(Esparsa m){
     Lista* aux;
     float naoNulos = 0;
     for(aux = m.prim; aux != NULL; aux = aux->prox){
         naoNulos += 1;
     }
-printf("\nPercentual de elementos nao nulos da matriz: %.2f %%", naoNulos * ((m.linhas * m.colunas) / 100));
+    printf("\nPercentual de elementos nao nulos da matriz: %.2f %%", (naoNulos/(m.linhas*m.colunas)) * 100.0);
 }
-
 
 int main(int argc, char const *argv[])
 {
     Esparsa matriz = cria_mat();
     preenche_mat(&matriz);
-    imprime_mat(matriz);//nao e obrigatorio essa aqui
+    imprime_mat(matriz);
     consulta_elem(matriz);
     imprime_somatorio_linha(matriz);
-    percentulal_nao_nulos(matriz);
+    percent_nao_nulos(matriz);
     return 0;
 }
