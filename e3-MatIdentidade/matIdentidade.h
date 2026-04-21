@@ -23,15 +23,19 @@ typedef struct identidade Identidade;
 
 //PROTOTIPOS DAS FUNCOES
 
-Identidade cria_mat();
+bool pos_valida(int l, int c, int ordem);
 
-Lista* novo_noh(Lista* listaMat, int l, int c, int v);
+bool pos_iguais(Lista* a, int l, int c);
 
-void preenche_mat(Identidade* m);
+bool atende_regras(Lista* a);
 
 void verifica_identidade(Identidade* m);
 
-int atende_regras(Lista* a);
+Identidade cria_mat();
+
+Lista* novo_noh(int l, int c, int v);
+
+void preenche_mat(Identidade* m);
 
 void imprime_mat(Identidade m);
 

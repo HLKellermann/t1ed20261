@@ -1,38 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "matIdentidade.h"
 
-Identidade cria_mat(){
-    Identidade m;
-    printf("Ordem da matriz identidade: ");
-    scanf("%d", &m.ordem);
-    m.iniLista = NULL;
-    return m;
+//FUNCOES AUXILIARES
+
+bool pos_valida(int l, int c, int ordem){
+    return ((l>=0 && l<ordem) && (c>=0 && c<ordem)) ? true : false;
 }
 
-Lista* novo_noh(Lista* listaMat, int l, int c, int v){
-    Lista* novoNoh = (Lista*) malloc(sizeof(Lista));
-    novoNoh->lin = l;
-    novoNoh->col = c;
-    novoNoh->info = v;
-    novoNoh->prox = listaMat;
-    return novoNoh;
+bool pos_iguais(Lista* a, int l, int c){
+    return (a->lin == l && a->col == c) ? true : false;
 }
 
-void preenche_mat(Identidade* m){
-    printf("\nPreenchimento da matriz: digite a linha, coluna e o valor\n");
-    printf("(Para parar de preencher a matriz, digite 0 0 0)\n");
-    int r=1;
-    while(r==1){
-        int l, c, v;
-        scanf("%d%d%d", &l, &c, &v);
-        if((l==0 && c==0) && v==0)
-            r=0;
-        else if((l>=0 && l<m->ordem) && (c>=0 && c<m->ordem))
-            m->iniLista = novo_noh(m->iniLista, l, c, v);
-        else
-            printf("Posicao para a matriz invalida!Tente de novo ou pare (0 0 0): \n");
-    }    
+bool atende_regras(Lista* a){
+    return ((a->lin==a->col && a->info==1) || ((a->lin!=a->col && a->info==0))) ? true : false;
 }
 
 void verifica_identidade(Identidade* m){
@@ -46,6 +28,63 @@ void verifica_identidade(Identidade* m){
     printf("\n%d e %d", diagOk, foraErr);
     m->ehIdentidade = ((foraErr == 0) && (diagOk == m->ordem));
 }
+
+
+//FUNCOES PRINCIPAIS(SOLICITADAS)
+
+Identidade cria_mat(){
+    Identidade m;
+    printf("Ordem da matriz identidade: ");
+    scanf("%d", &m.ordem);
+    m.iniLista = NULL;
+    return m;
+}
+
+
+Lista* novo_noh(int l, int c, int v){
+    Lista* novoNoh = (Lista*) malloc(sizeof(Lista));
+    if(novoNoh == NULL){
+        printf("\nErro de alocacao! Encerrando");
+        exit(1);
+    }
+
+    novoNoh->lin = l;
+    novoNoh->col = c;
+    novoNoh->info = v;
+    novoNoh->prox = NULL;
+    return novoNoh;
+}
+
+void preenche_mat(Identidade* m){
+    printf("\nPreenchimento da matriz: digite a linha, coluna e o valor\n");
+    printf("(Para parar de preencher a matriz, digite 0 0 0)\n");
+    int r=1;
+    while(r==1){
+        int l, c, v;
+        scanf("%d%d%d", &l, &c, &v);
+        if((l==0 && c==0) && v==0)
+            r=0;
+        else if(pos_valida(l, c, m->ordem)){
+            Lista* aux;
+            int jaExiste = 0;
+            for(aux = m->iniLista; aux != NULL; aux = aux->prox){
+                if(pos_iguais(aux, l, c)){
+                    aux->info = v;
+                    jaExiste = 1;
+                    break;
+                }
+            }
+            if(jaExiste == 0){
+                Lista* novoNoh = novo_noh(l, c, v);
+                novoNoh->prox = m->iniLista;
+                m->iniLista = novoNoh;
+            }
+        }
+        else
+            printf("Posicao para a matriz invalida!Tente de novo ou pare (0 0 0): \n");
+    }    
+}
+
 
 void imprime_mat(Identidade m){
     Lista* a;
@@ -68,11 +107,6 @@ void imprime_mat(Identidade m){
         }
     }    
     printf("\n");
-}
-
-
-int atende_regras(Lista* a){
-    return ((a->lin==a->col && a->info==1) || ((a->lin!=a->col && a->info==0))) ? 1 : 0;
 }
 
 
