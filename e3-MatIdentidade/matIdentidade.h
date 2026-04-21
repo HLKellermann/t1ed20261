@@ -15,7 +15,6 @@ typedef struct lista Lista;
 struct identidade
 {
     int ordem;
-    int ehIdentidade;
     struct lista* iniLista;
 };
 typedef struct identidade Identidade;
@@ -29,7 +28,7 @@ bool pos_iguais(Lista* a, int l, int c);
 
 bool atende_regras(Lista* a);
 
-void verifica_identidade(Identidade* m);
+bool verifica_identidade(Identidade m);
 
 Identidade cria_mat();
 

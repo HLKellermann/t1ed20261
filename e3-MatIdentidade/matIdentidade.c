@@ -17,16 +17,15 @@ bool atende_regras(Lista* a){
     return ((a->lin==a->col && a->info==1) || ((a->lin!=a->col && a->info==0))) ? true : false;
 }
 
-void verifica_identidade(Identidade* m){
+bool verifica_identidade(Identidade m){
     Lista* a;
     int foraErr = 0, diagOk = 0;
-    for(a = m->iniLista; a != NULL; a = a->prox){
+    for(a = m.iniLista; a != NULL; a = a->prox){
         if((a->lin == a->col) && a->info == 1)
             ++diagOk;
         foraErr += ((a->lin != a->col) && a->info != 0) ? 1 : 0;
     }
-    printf("\n%d e %d", diagOk, foraErr);
-    m->ehIdentidade = ((foraErr == 0) && (diagOk == m->ordem));
+    return ((foraErr == 0) && (diagOk == m.ordem));
 }
 
 
@@ -34,7 +33,7 @@ void verifica_identidade(Identidade* m){
 
 Identidade cria_mat(){
     Identidade m;
-    printf("Ordem da matriz identidade: ");
+    printf("\nOrdem da matriz identidade: ");
     scanf("%d", &m.ordem);
     m.iniLista = NULL;
     return m;
@@ -106,7 +105,6 @@ void imprime_mat(Identidade m){
                 printf("\n");
         }
     }    
-    printf("\n");
 }
 
 
@@ -114,7 +112,7 @@ void fora_da_principal(Identidade m){
     Lista* a = m.iniLista;
     int i, j;
 
-    if(m.ehIdentidade == 0){
+    if(!verifica_identidade(m)){
         printf("\nNao eh matriz identidade!\nPara ser Identidade, deve atender a regra:");
         printf("\nM(i,j): {1, se i = j\n\t{0, se i != j\n");
         printf("\nPosicoes que violaram essa propriedade:");
@@ -141,7 +139,6 @@ int main(int argc, char const *argv[])
 {
     Identidade matriz= cria_mat();
     preenche_mat(&matriz);
-    verifica_identidade(&matriz);
     imprime_mat(matriz);
     fora_da_principal(matriz);
     return 0;
