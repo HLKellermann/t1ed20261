@@ -113,17 +113,23 @@ void imprime_mat(Identidade m){
 void fora_da_principal(Identidade m){
     Lista* a = m.iniLista;
     int i, j;
+
     if(m.ehIdentidade == 0){
         printf("\nNao eh matriz identidade!\nPara ser Identidade, deve atender a regra:");
         printf("\nM(i,j): {1, se i = j\n\t{0, se i != j\n");
         printf("\nPosicoes que violaram essa propriedade:");
         for(i=0; i<m.ordem; i++){
             for(j=0; j<m.ordem; j++){
+                bool existe = false;
                 for(a = m.iniLista; a != NULL; a = a->prox){
-                    if((i == a->lin) && (j == a->col))
+                    if(pos_iguais(a, i, j)){
+                        existe = true;
                         if(atende_regras(a) == 0)
                             printf("\n(%d, %d): %d", a->lin, a->col, a->info);
+                    }
                 }
+                if((i==j) && existe == false)
+                    printf("\n(%d, %d): 0", i, j);
             }
         }
     }else{
