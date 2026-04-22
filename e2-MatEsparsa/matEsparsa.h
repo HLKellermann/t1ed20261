@@ -23,18 +23,26 @@ typedef struct esparsa Esparsa;
 
 //PROTOTIPOS DAS FUNCOES
 
+bool posicao_valida(Esparsa* m, int lin, int col);
+
+bool pos_iguais(Lista* a, int lin, int col);
+
+int resposta();
+
 Esparsa cria_mat();
 
-Lista* novo_noh(Lista* listaMat, int l, int c, int v);
+Lista* novo_noh(int l, int c, int v);
 
 void preenche_mat(Esparsa* m);
 
 void imprime_mat(Esparsa m);
 
-void consulta_elem(Esparsa m);
+void consulta_elem(Esparsa* m);
 
 void imprime_somatorio_linha(Esparsa m);
 
 void percent_nao_nulos(Esparsa m);
+
+void libera_mat(Esparsa* m);
 
 #endif
