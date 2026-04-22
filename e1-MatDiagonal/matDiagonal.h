@@ -19,6 +19,14 @@ typedef struct diagonal Diagonal;
 //valida se a posicao digitada pelo usuario esta dentro do tamanho da matriz
 bool posicao_valida(int lin, int col, int ordem);
 
+void imprime_consulta(Diagonal* m, int lin, int col);
+
+int continuar();
+
+int valida_input();
+
+int valida_ordem();
+
 //criação da matriz
 Diagonal cria_mat();
 
@@ -29,7 +37,7 @@ void preenche_mat(Diagonal* m);
 void imprime_mat(Diagonal m);
 
 //consulta de um determinado elemento da matriz (para consultar, o usuário informa a linha e a coluna onde o elemento se encontra)
-void consulta_elem(Diagonal m);
+void consulta_elem(Diagonal* m);
 
 //libera vetor da matriz
 void libera_mat(Diagonal *m);
