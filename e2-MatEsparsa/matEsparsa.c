@@ -13,7 +13,7 @@ bool pos_iguais(Lista* a, int lin, int col){
     return (a->linha == lin && a->coluna == col);
 }
 
-//funcao auxiliar: repete while ate o input ser valido (1 ou 0), retorna opcao para funcao principal
+/*---repete while ate o input ser valido (1 ou 0), retorna opcao para funcao principal---*/
 int resposta(){
     int r;
     do{
@@ -31,6 +31,7 @@ int resposta(){
     return r;
 }
 
+/*---criação da matriz---*/
 Esparsa cria_mat(){
     Esparsa m;
     printf("\nTamanho da Matriz Esparsa (linhas x colunas): ");
@@ -44,6 +45,7 @@ Esparsa cria_mat(){
     }
 }
 
+/*---criação de novo noh da lista---*/
 Lista* novo_noh(int lin, int col, int valor){
     Lista* novoNoh = (Lista*) malloc(sizeof(Lista));
     if(novoNoh == NULL){
@@ -58,6 +60,7 @@ Lista* novo_noh(int lin, int col, int valor){
     return novoNoh;
 }
 
+/*---preenchimento da matriz---*/
 void preenche_mat(Esparsa* m){
     printf("\nPreenchimento da matriz esparsa: digite a linha, coluna e o valor nao nulo\n");
     printf("(Para parar de preencher a matriz, digite 0 0 0)\n");
@@ -87,7 +90,7 @@ void preenche_mat(Esparsa* m){
     }
 }
 
-//funcao adicional para visualizar a matriz, nao foi solicitada no exercicio
+/*---impressao da matriz, nao foi solicitada no exercicio---*/
 void imprime_mat(Esparsa m){
     Lista* aux;
     int i, j;
@@ -110,7 +113,7 @@ void imprime_mat(Esparsa m){
     }    
 }
 
-
+/*---consulta elemento da matriz---*/
 void consulta_elem(Esparsa* m){
     int lin, col;
     Lista* aux;
@@ -137,6 +140,7 @@ void consulta_elem(Esparsa* m){
     }
 }
 
+/*---impressao da soma de todos os elementos da linha informada---*/
 void imprime_somatorio_linha(Esparsa m){
     int lin, r = 1;
     Lista* aux;
@@ -157,6 +161,7 @@ void imprime_somatorio_linha(Esparsa m){
     }
 }
 
+/*---porcentagem de elementos nao nulos da matriz---*/
 void percent_nao_nulos(Esparsa m){
     Lista* aux;
     float naoNulos = 0;
@@ -166,6 +171,7 @@ void percent_nao_nulos(Esparsa m){
     printf("\nPercentual de elementos nao nulos da matriz: %.2f %%", (naoNulos/(m.linhas*m.colunas)) * 100.0);
 }
 
+/*---libera matriz---*/
 void libera_mat(Esparsa* m){
     if(m == NULL) return;
     Lista* atual = m->prim;
@@ -179,6 +185,7 @@ void libera_mat(Esparsa* m){
     m->prim = NULL;
 }
 
+//FUNCAO PRINCIPAL MAIN
 int main(int argc, char const *argv[])
 {
     Esparsa matriz = cria_mat();

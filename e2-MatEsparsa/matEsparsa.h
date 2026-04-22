@@ -23,26 +23,37 @@ typedef struct esparsa Esparsa;
 
 //PROTOTIPOS DAS FUNCOES
 
+//valida se a posicao digitada pelo usuario esta dentro do tamanho da matriz
 bool posicao_valida(Esparsa* m, int lin, int col);
 
+//valida se linha = linha da lista, e se coluna = coluna da lista
 bool pos_iguais(Lista* a, int lin, int col);
 
+//repete while ate o input ser valido (1 ou 0), retorna opcao para funcao principal
 int resposta();
 
+//criação da matriz
 Esparsa cria_mat();
 
+//criação de novo noh da lista
 Lista* novo_noh(int l, int c, int v);
 
+//preenchimento da matriz
 void preenche_mat(Esparsa* m);
 
+//impressão da matriz
 void imprime_mat(Esparsa m);
 
+//consulta de um determinado elemento da matriz (para consultar, o usuário informa a linha e a coluna onde o elemento se encontra)
 void consulta_elem(Esparsa* m);
 
+//impressao da soma de todos os elementos da linha informada
 void imprime_somatorio_linha(Esparsa m);
 
+//porcentagem de elementos nao nulos da matriz
 void percent_nao_nulos(Esparsa m);
 
+//libera matriz
 void libera_mat(Esparsa* m);
 
 #endif
