@@ -1,6 +1,10 @@
 #ifndef MATESPARSA_H
 #define MATESPARSA_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
 //DEFINICAO DE STRUCTS
 
 struct lista //lista de valores não nulos da matriz esparsa. Os elementos não nulos da matriz são armazenados nesta lista.
