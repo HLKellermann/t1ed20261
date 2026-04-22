@@ -1,6 +1,10 @@
 #ifndef MATIDENTIDADE_H
 #define MATIDENTIDADE_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
 //DEFINICAO DE STRUCTS
 
 struct lista
@@ -26,9 +30,9 @@ bool pos_valida(int l, int c, int ordem);
 
 bool pos_iguais(Lista* a, int l, int c);
 
-bool atende_regras(Lista* a);
+bool atende_regras_identidade(Lista* a);
 
-bool verifica_identidade(Identidade m);
+bool verifica_identidade(Identidade* m);
 
 Identidade cria_mat();
 
@@ -38,6 +42,8 @@ void preenche_mat(Identidade* m);
 
 void imprime_mat(Identidade m);
 
-void fora_da_principal(Identidade m);
+void fora_da_principal(Identidade* m);
+
+void libera_mat(Identidade* m);
 
 #endif
