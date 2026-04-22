@@ -52,7 +52,6 @@ void imprime_mat(Diagonal m){
                 printf("\n");
         }   
     }
-    printf("\n");
 }
 
 /*---consulta de um determinado elemento da matriz---*/
@@ -71,7 +70,7 @@ void consulta_elem(Diagonal m){
         printf("\nPosicao invalida! Matriz Diagonal de Ordem %d, logo:\ninicio: (0,0) - fim: (%d, %d)", m.ordem, m.ordem-1, m.ordem-1);
 }
 
-/*---//libera vetor da matriz---*/
+/*---libera vetor da matriz---*/
 void libera_mat(Diagonal *m){
     if(m!=NULL && m->v!=NULL){
         free(m->v);
