@@ -90,3 +90,51 @@ void libera_matriz(int m, int n, int ***mat) {
     
     printf("Memoria da matriz 3D liberada com sucesso!\n");
 }
+int main(int argc, char const *argv[])
+{
+    int m, n, z;
+
+    printf("\n--- Teste de Matriz 3D (Exercicio 4) ---\n");
+    printf("Digite as dimensoes da matriz (Planos Linhas Colunas): ");
+    
+    // Lendo as 3 dimensões para criar o volume da matriz
+    if (scanf("%d %d %d", &m, &n, &z) != 3) {
+        printf("Erro: Entrada invalida para as dimensoes.\n");
+        return 1;
+    }
+
+    if (m <= 0 || n <= 0 || z <= 0) {
+        printf("Erro: As dimensoes devem ser maiores que zero.\n");
+        return 1;
+    }
+
+    // 1. Alocacao Dinamica
+    printf("\nAlocando matriz de tamanho %d x %d x %d...\n", m, n, z);
+    int ***matriz = aloca_matriz(m, n, z);
+
+    if (matriz == NULL) {
+        printf("Erro critico: Falha na alocacao de memoria.\n");
+        return 1;
+    }
+
+    // 2. Preenchimento
+    // Chama a funcao para preencher com a soma i+j+k
+    printf("Preenchendo valores automaticamente...\n");
+    preenche_matriz(m, n, z, matriz);
+
+    // 3. Impressao
+    // Mostra a matriz separada por planos no terminal
+    printf("\n--- Conteudo da Matriz 3D ---\n");
+    imprime_matriz(m, n, z, matriz);
+
+    // 4. Liberacao de Memoria (conforme .h)
+    printf("\nLiberando memoria da matriz...\n");
+    libera_matriz(m, n, matriz); 
+    
+    // Anulamos o ponteiro por seguranca
+    matriz = NULL;
+
+    printf("Teste concluido com sucesso!\n");
+
+    return 0;
+}
