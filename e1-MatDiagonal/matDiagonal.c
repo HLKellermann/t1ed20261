@@ -20,45 +20,78 @@ void imprime_consulta(Diagonal* m, int lin, int col){
         printf("\nPosicao (%d, %d) invalida! Indice min: 0, indice max: %d", lin, col, m->ordem-1);
 }
 
-int continuar(){
-    printf("\n[1] Repetir operacao   [0] Parar\t");
-    int resposta = valida_input();
-    return resposta;
+
+void posicoes_inteiras(int* linha, int* coluna){
+    int invalido = true;
+    int auxLin, auxCol;
+    do{
+        auxLin = scanf("%d", linha);  //passa entrada do usuario para variavel auxiliar
+        auxCol = scanf("%d", coluna);
+        if(auxLin != 1 || auxCol != 1){
+            printf("Entrada invalida!Digite os indices de novo: ");
+            while(getchar() != '\n');       //limpa buffer
+        }else{
+            break;
+        }
+    }while(invalido);
 }
 
-int valida_input(){
-    int valor, valorOk;
-//enquanto valor do input nao for valido, repete
-    do{
-        valorOk = scanf("%d", &valor);  //passa valor lido para variavel auxiliar
 
-        //se o valor lido nao foi um inteiro, avisa usuario e limpa buffer
-        if(valorOk != 1){
+int input_eh_inteiro(){
+    int input, aux;
+    do{
+        aux = scanf("%d", &input);  //passa entrada do usuario para variavel auxiliar
+    
+        if(aux != 1){
             printf("Entrada invalida!Tente de novo: ");
             while(getchar() != '\n');       //limpa buffer
         }
-    }while(valorOk != 1);
-    return valor;
+    }while(aux != 1);
+    return input;
 }
 
-int valida_ordem(){
+void valida_valores(int* input, int caso){
     bool invalido;
-    int ordem;
-    printf("Digite a ordem da Matriz Diagonal: ");
     do{
-        ordem = valida_input();
-        invalido = (ordem <= 0);
-        if(invalido)
-            printf("Valor deve ser maior do que 0! De novo: ");
+        if(caso == 1 && *input <= 0){
+            printf("Ordem deve ser maior que 0: ");
+            invalido = true;
+        }else if(caso == 2 && (*input != 0 && *input != 1)){
+            printf("Digite 0 ou 1!: ");
+            invalido = true;
+        }else{
+            invalido = false;
+            break;
+        }
+        *input = input_eh_inteiro();
     }while(invalido);
-    return ordem;
+}
+
+
+int leitura_input(int caso){
+    int input;
+    switch (caso){
+    case 1:
+        printf("Digite a ordem da Matriz Diagonal: ");
+        input = input_eh_inteiro();
+        valida_valores(&input, 1);
+        return input;
+    case 2:
+        printf("\n[1] Repetir operacao   [0] Parar\t");
+        input = input_eh_inteiro();
+        valida_valores(&input, 2);
+        return input;
+    default:
+        printf("\nHa algo de errado no codigo!");
+        exit(1);
+    }
 }
 
 /*---criação da matriz---*/
 Diagonal cria_mat(){
     Diagonal m;
 //alocacao dinamica do vetor da matriz
-    m.ordem = valida_ordem();
+    m.ordem = leitura_input(1);
     m.v = malloc(m.ordem * sizeof(int));
 //mensagem de erro
     if(m.v == NULL){
@@ -75,7 +108,7 @@ void preenche_mat(Diagonal* m){
 //laço para guardar apenas os valores da diagonal no vetor da matriz
     for(i=0; i<m->ordem; i++){
         printf("(%d,%d):", i, i);   //mostra a posicao que o valor serah guardado
-        m->v[i] = valida_input();   //guarda valor informado no vetor
+        m->v[i] = input_eh_inteiro();   //guarda valor informado no vetor
     }
 }
 
@@ -99,11 +132,9 @@ void consulta_elem(Diagonal* m){
     do{
     //usuario informa a linha e coluna onde o elemento se encontra
         printf("\nInforme a posicao (linha, coluna) do elemento: ");
-        lin = valida_input();
-        col = valida_input();
-
+        posicoes_inteiras(&lin, &col);
         imprime_consulta(m, lin, col);      //chama funcao para imprimir resultado da consulta
-    }while(continuar() == 1);
+    }while(leitura_input(2) == 1);
 }
 
 /*---libera vetor da matriz---*/
