@@ -2,57 +2,91 @@
 #include <stdlib.h>
 #include "matDimensoes.h"
 
+/*--- Alocação da matriz 3D com verificação de segurança em cada nível ---*/
 int*** aloca_matriz(int m, int n, int z) {
-    int ***mat;
-    mat = (int ***) malloc(m * sizeof(int **));
-    if (mat == NULL) {
-        printf("Erro de memoria!\n");
+    // Validação inicial 
+    if (m <= 0 || n <= 0 || z <= 0) {
+        printf("\nErro: Dimensoes invalidas (%dx%dx%d). Devem ser maiores que zero.\n", m, n, z);
         exit(1);
     }
+
+    int ***mat;
+
+    // 1. Aloca as linhas
+    mat = (int ***) malloc(m * sizeof(int **));
+    if (mat == NULL) {
+        printf("Erro de memoria no nivel 1!\n");
+        exit(1);
+    }
+
     for (int i = 0; i < m; i++) {
+        // 2. Aloca as colunas
         mat[i] = (int **) malloc(n * sizeof(int *));
+        if (mat[i] == NULL) {
+            printf("Erro de memoria no nivel 2!\n");
+            exit(1);
+        }
+        
         for (int j = 0; j < n; j++) {
+            // 3. Aloca a profundidade
             mat[i][j] = (int *) malloc(z * sizeof(int));
+            if (mat[i][j] == NULL) {
+                printf("Erro de memoria no nivel 3!\n");
+                exit(1);
+            }
         }
     }
     return mat;
 }
 
+/*--- Preenchimento da matriz ---*/
 void preenche_matriz(int m, int n, int z, int ***mat) {
+    if (mat == NULL) return;
+
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             for (int k = 0; k < z; k++) {
-                // Preenche com um valor qualquer (ex: soma dos índices)
+                // Mantendo a lógica de soma de índices para teste
                 mat[i][j][k] = i + j + k;
             }
         }
     }
 }
 
+/*--- Impressão organizada por Planos ---*/
 void imprime_matriz(int m, int n, int z, int ***mat) {
+    if (mat == NULL) {
+        printf("\nMatriz vazia ou nao alocada.\n");
+        return;
+    }
+
+    printf("\n--- Exibindo Matriz 3D (%dx%dx%d) ---\n", m, n, z);
     for (int i = 0; i < m; i++) {
         printf("Plano %d:\n", i);
         for (int j = 0; j < n; j++) {
             for (int k = 0; k < z; k++) {
-                printf("%d ", mat[i][j][k]);
+                printf("%4d ", mat[i][j][k]); // %4d ajuda a alinhar os números
             }
             printf("\n");
         }
         printf("\n");
     }
 }
+
+/*--- Liberação de memória (Desalocação) ---*/
 void libera_matriz(int m, int n, int ***mat) {
     if (mat == NULL) return;
 
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-            // Primeiro libera o vetor de inteiros (profundidade)
+            // Libera o nível mais interno primeiro
             free(mat[i][j]);
         }
-        // Depois libera o vetor de ponteiros (colunas)
+        // Libera o nível intermediário
         free(mat[i]);
     }
-    // Por fim, libera o vetor principal (linhas)
+    // Libera o nível base
     free(mat);
-    printf("Memoria da matriz liberada com sucesso!\n");
+    
+    printf("Memoria da matriz 3D liberada com sucesso!\n");
 }
