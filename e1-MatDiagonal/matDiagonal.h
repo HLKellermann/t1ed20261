@@ -14,18 +14,27 @@ int* v;         //o tamanho do vetor é igual a ordem da matriz. Os elementos da
 };
 typedef struct diagonal Diagonal;
 
-/*---FUNCOES---*/
+/*---FUNCOES AUXILIARES---*/
 
 //valida se a posicao digitada pelo usuario esta dentro do tamanho da matriz
 bool posicao_valida(int lin, int col, int ordem);
 
+//imprime o resultado da consulta feita na funcao 'consulta_elem'
 void imprime_consulta(Diagonal* m, int lin, int col);
 
-int continuar();
+//loop para tratar possivel entrada que nao seja um valor inteiro, para a posicao a se consultar em 'consulta_elem'
+void posicoes_inteiras(int* llinha, int* coluna);
 
-int valida_input();
+//loop para tratar possivel entrada que nao seja um valor inteiro(como char ou strings)
+int input_eh_inteiro();
 
-int valida_ordem();
+//loop ateh o input do usuario ser valido para o seu caso especifico
+void valida_valores(int* input, int caso);
+
+//função chamada pelas principais para realizar leitura e validação da entrada
+int leitura_input(int caso);
+
+/*---FUNCOES PRINCIPAIS---*/
 
 //criação da matriz
 Diagonal cria_mat();
